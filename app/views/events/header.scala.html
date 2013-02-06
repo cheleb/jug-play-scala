@@ -1,0 +1,23 @@
+@(event: Event)
+<header>
+	<div id="speakers">
+		<h2>Speakers</h2>
+		@for(speaker <- event.speakers) {
+		    <table cellpadding="4" cellspacing="10">
+		     <tr>
+		      <td>
+		       <img width="50px" height="50px" src='${speaker.photoUrl}'/>
+		      </td>
+		      <td>
+			   <dl>
+				<dt><a href="@routes.Application.member(speaker.id)">@speaker.fullname</a></dt>
+				<dd>@speaker.activity</dd>
+				<dd>@speaker.company</dd>
+				<dd><a href="@speaker.url" target="blank">@speaker.url</a></dd>
+			   </dl>
+			 </td>
+			</tr>
+		 </table>
+		}
+	</div>
+</header>

@@ -1,0 +1,14 @@
+@(list: List[Speaker])
+
+<table>
+  <tr>
+    <th>Nom</th>
+    <th>Entreprise</th>
+  </tr>
+  @for(speaker <- list){
+  <tr>
+    <td>@speaker.fullname</td>
+    <td>@speaker.company</td>
+  </tr>
+  }
+</table>

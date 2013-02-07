@@ -4,46 +4,49 @@ import play.api._
 import play.api.mvc._
 import models.Event
 import models.Speaker
+import play.api.templates.Html
+
 
 object Application extends Controller {
   
   
-  def main = views.html.main("JUG de Montpellier") _
+  def MainOk(c: Html) : SimpleResult[Html] = Ok(views.html.main("JUG de Montpellier")(c))
+  
   
   
   def index = Action {
-    Ok(views.html.index("JUG de Montpellier."))
+    MainOk(Html("JUG de Montpellier."))
   }
  
   def news() = Action {
-    Ok("News")
+    MainOk(Html("News"))
   }
   
   def event(nextEventId: Int) = Action {
-    Ok("Event: " + nextEventId)
+    MainOk(Html("Event: " + nextEventId))
   }
   
   def about = Action {
-    Ok(views.html.main("ss")(views.html.about()))
+    MainOk(views.html.about())
   }
   def members = Action {
-    Ok("Members")
+    MainOk(Html("Members"))
   }
   
   def member(id: Int) = Action {
-    Ok("Member: " + id)
+    MainOk(Html("Member: " + id))
   }
   
   def polls = Action {
-    Ok("Polls")
+    MainOk(Html("Polls"))
   }
   
   def speakers = Action {
-    Ok("Speakers")
+    MainOk(Html("Speakers"))
   }
   
   implicit def event :  Option[Event] = {
-   // None
+    //None
     Some(Event(2, "bidon", "test test", List(Speaker(1, "olivier.nouguier@gmail.com", "Olivier NOUGUIER","http://www.agilent.com","Architecte","Agilent Technolgies, Inc"))))
   } 
   

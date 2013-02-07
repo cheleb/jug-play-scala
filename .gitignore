@@ -7,3 +7,4 @@ dist/
 bin/
 logs/
 target/
+manifest.yml

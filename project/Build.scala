@@ -1,10 +1,10 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "www.jug-montpellier.org"
+    val appName         = "jug-play-scala"
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
         "postgresql" % "postgresql" % "9.1-901.jdbc4"
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+    val main = play.Project(appName, appVersion, appDependencies).settings(
       // Add your own project settings here      
     )
 

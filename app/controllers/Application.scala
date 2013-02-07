@@ -5,19 +5,20 @@ import play.api.mvc._
 import models.Event
 import models.Speaker
 import play.api.templates.Html
+import views.html._
 
 
 object Application extends Controller {
   
   
-  def MainOk(c: Html) : SimpleResult[Html] = Ok(views.html.main("JUG de Montpellier")(c))
-  
+  def MainOk(c: Html) : SimpleResult[Html] = Ok(views.html.main("JUG de Montpellier - play 2.1")(c))
   
   
   def index = Action {
-    MainOk(Html("JUG de Montpellier."))
+    MainOk(welcome())
   }
  
+  
   def news() = Action {
     MainOk(Html("News"))
   }

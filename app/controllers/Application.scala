@@ -47,7 +47,7 @@ object Application extends Controller {
   }
   
   implicit def event :  Option[Event] = {
-    //None
+    None
     Some(Event(2, "bidon", "test test", List(Speaker(1, "olivier.nouguier@gmail.com", "Olivier NOUGUIER","http://www.agilent.com","Architecte","Agilent Technolgies, Inc"))))
   } 
   

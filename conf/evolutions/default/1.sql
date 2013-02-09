@@ -42,7 +42,7 @@
         id serial,
         orderInEvent integer not null,
         tags text,
-        teaser text,
+        teaser varchar(254),
         datetime text,
         title text,
         event_id bigint,

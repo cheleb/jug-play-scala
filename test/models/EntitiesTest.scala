@@ -16,10 +16,14 @@ object EntitiesTest extends App {
 
     
     val q = for {
-      t <- Events if t.open
+      e <- Events if e.open
+      t <- Talks if e.id === t.event_id
     } yield(t)
     
-    print(q.list)
+    
+    
+    println(q.invoker.selectStatement)
+    println(q.list)
 
   }
 

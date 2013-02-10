@@ -146,6 +146,7 @@ object Talks extends Table[Talk]("talk"){
 
   
   def speaker = foreignKey("speaker_id", speaker_id, Speakers)(_.id)
+  def event = foreignKey("event_id", event_id, Events)(_.id)
   
   def all() = Query(Talks).list
 }

@@ -33,8 +33,8 @@ trait MainAction extends Controller {
 
       val q = for {
         e <- Events if e.open
-        t <- Talks
-        s <- Speakers
+        t <- Talks if t.event_id === e.id
+        s <- Speakers if s.id === t.speaker_id
 
       } yield (e, t, s)
 

@@ -7,7 +7,7 @@ import views.html._
 import views.html.speakers.list
 import models.Speakers
 
-object Application extends MainAction {
+object Application extends MainAction  {
 
   def index = mainAction {
     welcome()
@@ -17,7 +17,7 @@ object Application extends MainAction {
     Html("News")
   }
 
-  def event(nextEventId: Int) = mainAction {
+  def event(nextEventId: Long) = mainAction {
     Html("Event: " + nextEventId)
   }
 
@@ -29,7 +29,7 @@ object Application extends MainAction {
     Html("Members")
   }
 
-  def member(id: Int) = mainAction {
+  def member(id: Long) = mainAction {
     Html("Member: " + id)
   }
 

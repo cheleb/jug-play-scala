@@ -1,8 +1,8 @@
-@(event: Event)
+@(event: (Event, Talk, Speaker) )
 <header>
 	<div id="speakers">
 		<h2>Speakers</h2>
-		@for(speaker <- event.speakers) {
+		@for(speaker <- List[Speaker](event._3)) {
 		    <table cellpadding="4" cellspacing="10">
 		     <tr>
 		      <td>
@@ -12,7 +12,7 @@
 			   <dl>
 				<dt><a href="@routes.Application.member(speaker.id.get)">@speaker.fullname</a></dt>
 				<dd>@speaker.activity</dd>
-				<dd>@speaker.company</dd>
+				<dd>@speaker.compan</dd>
 				<dd><a href="@speaker.url" target="blank">@speaker.url</a></dd>
 			   </dl>
 			 </td>

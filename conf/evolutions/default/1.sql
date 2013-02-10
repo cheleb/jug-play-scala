@@ -3,13 +3,13 @@
 # --- !Ups
 
     create table Event (
-        id serial,
+        id bigserial,
         capacity integer not null,
         date timestamp,
         description text,
         location text,
         map text,
-        open bit not null,
+        open boolean not null,
         registrationURL text,
         report text,
         title text,
@@ -17,7 +17,7 @@
     );
 
     create table Participation (
-        id serial,
+        id bigserial,
         code text,
         status integer,
         event_id bigint,
@@ -26,12 +26,12 @@
     );
 
     create table Speaker (
-        id serial,
+        id bigserial,
         activity text,
         compan text,
         description text,
         fullName text,
-        jugmember bit,
+        jugmember boolean,
         memberFct text,
         photoUrl text,
         url text,
@@ -39,7 +39,7 @@
     );
 
     create table Talk (
-        id serial,
+        id bigserial,
         orderInEvent integer not null,
         tags text,
         teaser varchar(254),
@@ -51,7 +51,7 @@
     );
 
     create table "User" (
-        id serial,
+        id bigserial,
         email text,
         primary key (id)
     );

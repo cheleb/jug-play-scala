@@ -5,7 +5,7 @@
     alter table Event add partner_id bigint;
 
     create table EventPartner (
-        id serial,
+        id bigserial,
         description text,
         logoURL text,
         name text,
@@ -14,8 +14,8 @@
     );
 
     create table News (
-        id serial,
-        comments bit not null,
+        id bigserial,
+        comments boolean not null,
         content text,
         date timestamp,
         title text,
@@ -29,7 +29,7 @@
     alter table Speaker add personalUrl text;
 
     create table Tag (
-        id serial,
+        id bigserial,
         name text,
         primary key (id)
     );
@@ -41,7 +41,7 @@
     );
 
     create table YearPartner (
-        id serial,
+        id bigserial,
         description text,
         logoURL text,
         name text,
@@ -52,7 +52,7 @@
     );
     
     create table Poll (
-        id serial,
+        id bigserial,
         question text not null,
         expiryDate timestamp,
         visible boolean,
@@ -60,7 +60,7 @@
     );
 
     create table Answer (
-        id serial,
+        id bigserial,
         answer text not null,
         votes bigint,
         poll_id bigint not null,

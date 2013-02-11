@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(implicit event: Option[(Event, Talk, Speaker)])
+@(title: String)(content: Html)(implicit event: Option[EventViewObject])
 
 <!DOCTYPE html>
 
@@ -20,7 +20,7 @@
 				<ul>
 					<li id="nav-home"><a href="@routes.Application.index()">Home</a></li>
 					<li id="nav-new"><a href="@routes.Application.news()">News</a></li>
-					@event.map { t => <li id="nav-event"><a href="@routes.Application.event(t._1.id.get)">Events</a></li>}
+					@event.map { t => <li id="nav-event"><a href="@routes.Application.event(t.event.id.get)">Events</a></li>}
 <!--					<li><a href="#">Publications</a></li>-->
 					<li id="nav-about"><a href="@routes.Application.about()">A propos</a></li>
 					<li id="nav-members""><a href="@routes.Application.members()">Membres</a></li>

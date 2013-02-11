@@ -6,3 +6,5 @@ insert into event (id, capacity, "date",     description, location, map,   open,
              
 insert into talk (id, orderinevent, teaser,       datetime,            title,       event_id, speaker_id)
            values (1,  1,            'My teaser', '20121230 12:12:12', 'Ze talk',  1,        1);  
+insert into talk (id, orderinevent, teaser,       datetime,            title,       event_id, speaker_id)
+           values (2,  1,            'My teaser 2', '20121230 12:12:12', 'Ze talk 2',  1,        1);  

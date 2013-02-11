@@ -1,8 +1,8 @@
-@(event: (Event, Talk, Speaker) )
+@(event: EventViewObject )
 <header>
 	<div id="speakers">
 		<h2>Speakers</h2>
-		@for(speaker <- List[Speaker](event._3)) {
+		@for(speaker <- event.speakers) {
 		    <table cellpadding="4" cellspacing="10">
 		     <tr>
 		      <td>

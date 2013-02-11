@@ -4,13 +4,13 @@ import play.api._
 import play.api.mvc._
 import play.api.templates.Html
 import views.html._
-import models.Event
-import models.Speaker
+import models._
+
 import scala.slick.session.Database
 import play.api.db.DB
 import play.api.Play.current
 import java.sql.Timestamp
-import models.Events
+
 import scala.slick.lifted.Query
 import models.Speakers
 import scala.slick.driver.BasicDriver.Implicit._
@@ -27,7 +27,7 @@ trait MainAction extends Controller {
     Ok(views.html.main("JUG de Montpellier - play 2.1")(c))
   }
 
-  implicit def event: Option[(Event,Talk, Speaker)] = {
+  implicit def event: Option[(EventViewObject)] = {
 
     database.withSession {
 
@@ -38,18 +38,15 @@ trait MainAction extends Controller {
 
       } yield (e, t, s)
 
-      
-      
       val list = q.list
-      val ret = list match {
+      val map = list.groupBy(t => t._1)
+
+      val r = map map { case (k, v) => EventViewObject(k, v map (_._2), v map (_._3)) }
+
+      r match {
         case h :: _ => Some(h)
         case _ => None
       }
-      
-      
-      
-      
-      ret
     }
 
   }

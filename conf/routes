@@ -11,6 +11,8 @@ GET     /polls                      controllers.Application.polls
 GET     /news                       controllers.Application.news
 GET     /speakers                   controllers.Application.speakers
 GET     /event/:nextEventId         controllers.Application.event(nextEventId: Long)
+GET     /partners                   controllers.Application.partners
+GET     /partner/:id                controllers.Application.partner(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

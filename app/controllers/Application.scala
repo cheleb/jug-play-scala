@@ -36,6 +36,14 @@ object Application extends MainAction  {
   def polls = mainAction {
     Html("Polls")
   }
+  
+  def partners = mainAction {
+    Html("Partners")
+  }
+  
+  def partner(id: Long) = mainAction {
+    Html("Partner id: " + id)
+  }
 
   def speakers = mainAction {
     database.withSession {

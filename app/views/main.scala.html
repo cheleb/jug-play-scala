@@ -3,32 +3,123 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>@title</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.tweet.js")"></script>
-        
-    </head>
-    <body>
-       <div id="wrapper">
-			<a id="logo" href="@routes.Application.index()">
-				<span>Montpellier Jug</span></a>
-				<nav id="menu">
-				<ul>
-					<li id="nav-home"><a href="@routes.Application.index()">Home</a></li>
-					<li id="nav-new"><a href="@routes.Application.news()">News</a></li>
-					@event.map { t => <li id="nav-event"><a href="@routes.Application.event(t.event.id.get)">Events</a></li>}
-<!--					<li><a href="#">Publications</a></li>-->
-					<li id="nav-about"><a href="@routes.Application.about()">A propos</a></li>
-					<li id="nav-members""><a href="@routes.Application.members()">Membres</a></li>
-                    <li id="nav-polls"><a href="@routes.Application.polls()">Sondages</a></li>
-				</ul>
-			</nav>
-			@event.map { t => @events.header(t) }
-        @content
-        </div>
-    </body>
+<head>
+<title>@title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.tweet.js")"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<a id="logo" href="@routes.Application.index()"> <span>Montpellier
+				Jug</span></a>
+		<nav id="menu">
+			<ul>
+				<li id="nav-home"><a href="@routes.Application.index()">Home</a></li>
+				<li id="nav-new"><a href="@routes.Application.news()">News</a></li>
+				@event.map { t =>
+				<li id="nav-event"><a
+					href="@routes.Application.event(t.event.id.get)">Events</a></li>}
+				<!--					<li><a href="#">Publications</a></li>-->
+				<li id="nav-about"><a href="@routes.Application.about()">A
+						propos</a></li>
+				<li id="nav-members""><a href="@routes.Application.members()">Membres</a></li>
+				<li id="nav-polls"><a href="@routes.Application.polls()">Sondages</a></li>
+			</ul>
+		</nav>
+		@event.map { t => @events.header(t) } @content
+
+		<section id="partners">
+			<h2>
+				<a href="@routes.Application.partners()">Partenaires</a>
+			</h2>
+			<div class="partners-register">
+				<h3>Devenir sponsor?</h3>
+				<p>Venez nous rencontrer lors d'un évènement ou envoyez nous un
+					email.</p>
+			</div>
+			<ul class="partners-list">
+				@for(partner <- List[Yearpartner]() ){
+				<li><a href="@routes.Application.partner(1)"><img
+						src="@routes.Assets.at(partner.logourl.get)" /></a></li> }
+				<div class="clear"></div>
+			</ul>
+
+		</section>
+
+	</div>
+	<footer>
+		<h2>Montpellier JUG, partages et discussions sur Java en
+			Languedoc-Roussillon.</h2>
+		<div>
+			<h2>A propos?</h2>
+			<p>Nous sommes une association loi 1901, créée pour partager nos
+				expériences des TIC, et promouvoir les technologies autour de Java
+				en Languedoc-Roussillon.</p>
+			<p>L'objectif premier est de réunir les acteurs montpellierains
+				(sociétés, écoles, étudiants), à travers notamment l'organisation de
+				soirées thématiques, gratuites et ouvertes à tous.</p>
+			<p>Une autre finalité est la mise en relation de ces acteurs, par
+				d'autres moyens que les forums et groupes virtuels.</p>
+			<p>
+				<a id="contact" href="@routes.Application.about()">En savoir
+					plus...</a>
+			</p>
+		</div>
+		<div>
+			<h2>Participez!</h2>
+			<p>Chaque participant est encouragé à promouvoir les évènements
+				via des gazoullis, courriels ou tout autre moyen de communication.</p>
+			<p>Les thématiques sont ouvertes à proposition, si vous souhaitez
+				que le JUG intervienne sur un sujet en particulier, faites-le nous
+				savoir en envoyant un courriel.</p>
+			<p>
+				Enfin, si vous avez une expérience sur un sujet spécifique, et que
+				vous souhaitez la partager, nous sommes en perpétuelle recherche de
+				nouveaux <a href="@routes.Application.speakers()">speakers</a>.
+			</p>
+			<p>
+				<a id="contact" href="mailto:info@('@')jug-montpellier.org">info@('@')jug-montpellier.org</a>
+			</p>
+		</div>
+		<div>
+			<h2>Communauté...</h2>
+			<p>
+				<a id="contact"
+					href="http://groups.google.com/group/jug-montpellier"
+					target="_blank">Google group</a>
+			</p>
+			<p>
+				<a id="contact" href="http://github.com/Jug-Montpellier"
+					target="_blank">Github</a>
+			</p>
+			<p>
+				<a id="contact" href="http://twitter.com/montpellierjug"
+					target="_blank">@('@')montpellierjug</a>
+			</p>
+			<div class="tweets"></div>
+		</div>
+		<hr />
+		<p class="credits">
+			Contenus sous licence <a
+				href="http://creativecommons.org/licenses/by/3.0/">CreativeCommons</a>
+			— <a id="contact" href="#w">Crédits</a>
+		</p>
+	</footer>
+</body>
+<script type='text/javascript'>
+	jQuery(function($) {
+		$(".tweets").tweet({
+			join_text : "auto",
+			username : "montpellierjug",
+			avatar_size : 32,
+			count : 2,
+			loading_text : "Chargement...",
+			auto_join_text_default : "",
+			auto_join_text_url : ""
+		});
+	});
+</script>
 </html>

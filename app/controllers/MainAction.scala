@@ -50,5 +50,11 @@ trait MainAction extends Controller {
     }
 
   }
+  
+  implicit def yearPartners : List[Yearpartner] = {
+    database.withSession {
+      Query(Yearpartners).list
+    }
+  }
 
 }

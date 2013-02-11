@@ -8,3 +8,7 @@ insert into talk (id, orderinevent, teaser,       datetime,            title,   
            values (1,  1,            'My teaser', '20121230 12:12:12', 'Ze talk',  1,        1);  
 insert into talk (id, orderinevent, teaser,       datetime,            title,       event_id, speaker_id)
            values (2,  1,            'My teaser 2', '20121230 12:12:12', 'Ze talk 2',  1,        1);  
+
+           
+insert into yearpartner(id, description, logourl, name, startdate, stopdate, url)
+                 values( 2, 'Polytech Montepellier', 'http://www.emploilr.com/images/logoclt/logo_polytechmontpellier.jpg', 'Polytech Montpellier', '20111010', null, 'http://www.polytech.univ-montp2.fr/')

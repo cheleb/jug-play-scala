@@ -4,8 +4,10 @@ import java.io._
 import java.security._
 import controllers.routes
 
-case class EventViewObject(event: Event, talks: List[Talk], speakers: List[Speaker]) {
+case class EventViewObject(event: Event, talks: List[Talk], speakers: List[Speaker])
 
+
+object gravatar {
   private def hex(array: Array[Byte]) = {
     val sb = new StringBuffer()
     for (i <- 0 to array.length - 1)
@@ -26,11 +28,10 @@ case class EventViewObject(event: Event, talks: List[Talk], speakers: List[Speak
     }
   }
 
-  def gravatar(speaker: Speaker) = {
+  def url(speaker: Speaker) = {
     speaker.email match {
       case Some(e) => "http://www.gravatar.com/avatar/" + md5Hex(e)
       case _ => routes.Assets.at("images/none.jpg")
     }
   }
-
 }

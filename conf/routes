@@ -5,12 +5,12 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /about                      controllers.Application.about
+GET     /event/:id                  controllers.Application.event(id: Long)
 GET     /members                    controllers.Application.members
 GET     /member/:id                 controllers.Application.member(id: Long)
 GET     /polls                      controllers.Application.polls
 GET     /news                       controllers.Application.news
 GET     /speakers                   controllers.Application.speakers
-GET     /event/:nextEventId         controllers.Application.event(nextEventId: Long)
 GET     /partners                   controllers.Application.partners
 GET     /partner/:id                controllers.Application.partner(id: Long)
 

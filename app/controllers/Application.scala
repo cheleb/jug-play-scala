@@ -4,13 +4,16 @@ package controllers
 import play.api.templates.Html
 import views.html._
 
-import views.html.speakers.list
 import models.Speakers
+import models.Events
 
 object Application extends MainAction  {
 
   def index = mainAction {
-    welcome()
+    database.withSession {
+      
+    	views.html.home(Events.all)
+    }
   }
 
   def news() = mainAction {
@@ -47,7 +50,7 @@ object Application extends MainAction  {
 
   def speakers = mainAction {
     database.withSession {
-      views.html.speakers.list(Speakers.all)
+      views.html.speakers(Speakers.all)
     }
   }
 

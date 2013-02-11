@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(implicit event: Option[EventViewObject])
+@(title: String)(content: Html)(implicit event: Option[EventViewObject], partners: List[Yearpartner])
 
 <!DOCTYPE html>
 
@@ -41,9 +41,9 @@
 					email.</p>
 			</div>
 			<ul class="partners-list">
-				@for(partner <- List[Yearpartner]() ){
-				<li><a href="@routes.Application.partner(1)"><img
-						src="@routes.Assets.at(partner.logourl.get)" /></a></li> }
+				@for(partner <- partners ){
+				<li><a href="@routes.Application.partner(partner.id.get)"><img
+						src="@partner.logourl.get" /></a></li> }
 				<div class="clear"></div>
 			</ul>
 

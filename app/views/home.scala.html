@@ -1,0 +1,12 @@
+@(lastEvents: List[Event])
+<section id="last-events">
+		<h2>Last events</h2>
+		@for(event <- lastEvents){
+			<article>
+				<h3>@event.title</h3>
+				@event.date.map { d => <p class="date">@d.format("dd MMMM yyyy")</p>}
+				<p>@event.description</p>
+				<a class="more" href="@routes.Application.event(event.id.get)">Lire la suite</a>
+			</article>
+		}
+</section>

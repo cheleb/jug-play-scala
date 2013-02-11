@@ -42,7 +42,7 @@ object Events extends Table[Event]("event"){
   def * = id.? ~ capacity ~ date.? ~ description.? ~ location.? ~ map.? ~ open ~ registrationurl.? ~ report.? ~ title.? ~ partner_id.? <> (Event, Event.unapply _)
 
   
-  def all() = Query(Events).list
+  def all() = Query(Events).sortBy(_.date.desc.nullsLast).list
 }
 case class Eventpartner(id: Option[Long],description: Option[String],logourl: Option[String],name: Option[String],url: Option[String])
 

@@ -1,0 +1,30 @@
+@(list: List[Speaker])
+<section id="speakerstopbox">
+	<h2>Intervenir?</h2>
+	<p>Vous voulez proposer un sujet, faire une présentation d'une
+		technologie que vous maitrisez et partager votre expérience avec une
+		communauté ouverte? N'hésitez pas à nous contacter!</p>
+</section>
+<section id="members">
+	<h2>Speakers</h2>
+	@for(speaker <- list){
+	<article>
+		<div class="member-photo">
+			<img width="110" alt="@speaker.fullname" src="@gravatar.url(speaker)">
+		</div>
+		<div>
+			<h3>
+				<a href="@routes.Application.member(speaker.id.get)">@speaker.fullname</a>
+			</h3>
+			@if(speaker.url.isEmpty) {
+			 <span>@speaker.compan</span><br /> 
+			} else { <span><a href="@speaker.url" target="_blank">@speaker.compan</a></span><br />
+			} 
+			${speaker.activity.nl2br()}
+			<br>
+			<br>
+			 ${speaker.description.nl2br()}
+		</div>
+	</article>
+	}
+</section>

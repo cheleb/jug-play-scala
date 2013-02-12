@@ -25,8 +25,8 @@ object Application extends MainAction  {
     
     database.withSession {
         val event = Events.getById(id).get
-        val partner = event.event.partner_id.flatMap {id => Eventpartners.getById(id)}
-    	views.html.event(event, partner, Events.pastAndUpComing)
+        
+    	views.html.event(event, Events.pastAndUpComing)
     }
     
   }

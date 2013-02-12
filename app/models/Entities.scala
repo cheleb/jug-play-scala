@@ -50,29 +50,34 @@ object Events extends Table[Event]("event") {
     val q = for {
       e <- Events if e.id === id
       t <- Talks if t.event_id === e.id
+      t_t <- Talk_tags if t_t.talk_id === t.id
+      tag <- Tags if tag.id === t_t.tags_id
       s <- Speakers if s.id === t.speaker_id
-    } yield (e, t, s)
+    } yield (e, t, s, tag)
 
     vo(q)
   }
-  
+
   def getOpened() = {
 
     val q = for {
       e <- Events if e.open
       t <- Talks if t.event_id === e.id
+      t_t <- Talk_tags if t_t.talk_id === t.id 
+      tag <- Tags if t_t.tags_id === tag.id
       s <- Speakers if s.id === t.speaker_id
-    } yield (e, t, s)
+    } yield (e, t, s, tag)
 
     vo(q)
   }
-  
-  private def vo(q: Query[(models.Events.type, models.Talks.type, models.Speakers.type), (models.Event, models.Talk, models.Speaker)]): Option[EventViewObject] = {
+
+  private def vo(q: Query[(models.Events.type, models.Talks.type, models.Speakers.type, models.Tags.type), (models.Event, models.Talk, models.Speaker, models.Tag)]): Option[EventViewObject] = {
 
     val list = q.list
-    val map = list.groupBy(t => t._1)
+    
+    val map = list.groupBy(t => t._1).map { case (k, v) => (k,v.groupBy(u => u._2)) }
 
-    val r = map map { case (k, v) => EventViewObject(k, v map (_._2), v map (_._3)) }
+    val r = map map { case (k, v) => EventViewObject(k, v.toList.map { case (talk, list) => TalkViewObject(talk, list.map(_._3).distinct, list.map(_._4).distinct) }, k.partner_id.flatMap(id => Eventpartners.getById(id))) }
 
     r match {
       case h :: _ => Some(h)
@@ -93,19 +98,17 @@ object Eventpartners extends Table[Eventpartner]("eventpartner") {
   def * = id.? ~ description.? ~ logourl.? ~ name.? ~ url.? <> (Eventpartner, Eventpartner.unapply _)
 
   def all() = Query(Eventpartners).list
-  
+
   def getById(id: Long) = {
-		  val q =for {
-		    p <- Eventpartners if p.id === id
-		  } yield(p)
-		  q.list match {
-		    case p :: _ => Some(p)
-		    case _ => None
-		  }
+    val q = for {
+      p <- Eventpartners if p.id === id
+    } yield (p)
+    q.list match {
+      case p :: _ => Some(p)
+      case _ => None
+    }
   }
-  
-  
-  
+
 }
 case class News(id: Option[Long], comments: Boolean, content: Option[String], date: Option[Timestamp], title: Option[String])
 

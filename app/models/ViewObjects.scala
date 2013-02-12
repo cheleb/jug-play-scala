@@ -4,7 +4,8 @@ import java.io._
 import java.security._
 import controllers.routes
 
-case class EventViewObject(event: Event, talks: List[Talk], speakers: List[Speaker])
+case class TalkViewObject(talk: Talk, speakers: List[Speaker], tags: List[Tag])
+case class EventViewObject(event: Event, talks: List[TalkViewObject], partner: Option[Eventpartner])
 
 
 object gravatar {

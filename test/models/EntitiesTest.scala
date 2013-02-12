@@ -10,10 +10,10 @@ import Database.threadLocalSession
 object EntitiesTest extends App {
   Database.forURL("jdbc:postgresql:jug", "test", "test", driver = "org.postgresql.Driver") withSession {
    
-    val (p,u) = Events.pastAndUpComing
+    val p = Events.getOpened
     
     println(p)
-    println(u)
+    
    
     
   }

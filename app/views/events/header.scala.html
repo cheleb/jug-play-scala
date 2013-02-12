@@ -1,23 +1,51 @@
-@(event: EventViewObject )
+@(vo: EventViewObject )
 <header>
 	<div id="speakers">
 		<h2>Speakers</h2>
-		@for(speaker <- event.speakers) {
-		    <table cellpadding="4" cellspacing="10">
-		     <tr>
-		      <td>
-		       <img width="50px" height="50px" src='@gravatar.url(speaker)'/>
-		      </td>
-		      <td>
-			   <dl>
-				<dt><a href="@routes.Application.member(speaker.id.get)">@speaker.fullname</a></dt>
-				<dd>@speaker.activity</dd>
-				<dd>@speaker.compan</dd>
-				<dd><a href="@speaker.url" target="blank">@speaker.url</a></dd>
-			   </dl>
-			 </td>
+		<table cellpadding="4" cellspacing="10">
+		    @for(speaker <- vo.talks.flatMap{ _.speakers }.distinct){
+			<tr>
+				<td><img width="50px" height="50px"
+					src='@gravatar.url(speaker)' /></td>
+				<td>
+					<dl>
+						<dt>
+							<a href="@routes.Application.member(speaker.id.get)">@speaker.fullname</a>
+						</dt>
+						<dd>@speaker.activity</dd>
+						<dd>@speaker.compan</dd>
+						<dd>
+							<a href="@speaker.url" target="blank">@speaker.url</a>
+						</dd>
+					</dl>
+				</td>
 			</tr>
-		 </table>
+			}
+		</table>
+	</div>
+	<div id="presentation">
+		<h1>
+			<a href="@routes.Application.event(vo.event.id.get)">@vo.event.title</a>
+		</h1>
+		@vo.partner.map { partner =>
+		<h2>
+			<a href="Application.eventPartner(event.partner.id)">Cet
+				évènement est sponsorisé par @partner.name</a>
+		</h2>
 		}
+		<p>
+			@vo.event.description <a
+				href="@routes.Application.event(vo.event.id.get)">Plus
+				d'informations</a>
+		</p>
+		<ul id="details">
+			@vo.event.date.map { date =>
+			<li class="date">@date.format("dd MMMM yyyy")</li>}
+			@vo.event.location.map { location =>
+			<li class="place">@location</li>}
+			<li class="register"><a
+				href="@routes.Application.event(vo.event.id.get)#inscription">Inscription</a>
+			<li>
+		</ul>
 	</div>
 </header>

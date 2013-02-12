@@ -1,4 +1,4 @@
-@(event: EventViewObject, partner: Option[Eventpartner], events: (List[Event], List[Event]) )
+@(vo: EventViewObject, events: (List[Event], List[Event]) )
 <style>
 #main article .speaker
 {
@@ -28,46 +28,43 @@
 		</ul>
 	</nav>
 	<article>
-		@partner.map { p => 
+		@vo.partner.map { partner => 
 		<h2>Partenaire</h2>
-		<p>Cet évènement est sponsorisé par <a href="routes.Application.eventPartner(event.partner.id)">${event.partner.name}</a>.</p>
-		@p.logourl.map { url =>
+		<p>Cet évènement est sponsorisé par <a href="routes.Application.eventPartner(partner.id.get)">@partner.name</a>.</p>
+		@partner.logourl.map { url =>
 		<p align="center"><img src="@url"/></p>
 		}
 		}
-		#{if event.report != null && !event.report.equals("")}
-			<h2>Compte rendu de la soir√©e</h2>
-			${event.report}
-		#{/if}
+		@vo.event.report.map { report =>
+			<h2>Compte rendu de la soirée</h2>
+			@report
+		}
 		<h2>Programme</h2>
-		#{list event.talks(), as : "talk"}
-			<h3>${talk.time} : ${talk.title}</h3>
-			#{if talk.getTags()}
+		@for(vot <- vo.talks ){
+			<h3>@vot.talk.datetime : @vot.talk.title</h3>
+			@if(vot.tags.size > 0){
 			<p>Tags:
-			#{list talk.getTags(), as : "tag"}
-			<a href="Application.listTagged(tag.name)">${tag.name}</a>${tag_isLast ?'':', ' }
-			#{/list}
-			#{/if}
+			 @for(tag <- vot.tags){
+			  <a href="Application.listTagged(tag.name)">@tag.name</a>
+			  }
+			}
 			</p>
-			#{if talk.speaker}
-			<p>Pr√©sent√© par <a href="Application.member(talk.speaker.id)">${talk.speaker.fullName}</a></p>
-			#{/if}
-			<p>${talk.teaser}</p>
-		#{/list}
+			<p>Présenté par:
+			@for(speaker <- vot.speakers){
+			 <a href="@routes.Application.member(speaker.id.get)">@speaker.fullname</a></p>
+			}
+			<p>@vot.talk.teaser</p>
+		}
 
 		<h2>Lieu</h2>
-		<p>${event.location}</p>
-		#{if event.map != null && !event.map.equals("")}
-			${event.map.raw()}
-		#{/if}
-		
+		<p>@vo.event.location</p>
+		@vo.event.map.map { map => @map}
+				
 		<h2>Inscription</h2>
 		<a id="inscription"></a>
-		#{if (utils.EventBrite.isEventBrite(event)) }
 		<div style="width:100%; text-align:left;" >
   			<iframe src="http://www.eventbrite.com/tickets-external?eid=${utils.EventBrite.getId(event)}&ref=etckt" frameborder="0" height="160" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe>
 		</div>
-		#{/if}
 		<h2>After</h2>
 		<p>A la fin de la soirée, une troisième mi-temps sera proposée dans un bar pour continuer à échanger et sympathiser </p>
 		

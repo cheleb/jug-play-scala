@@ -1,0 +1,125 @@
+@(event: EventViewObject, partner: Option[Eventpartner], events: (List[Event], List[Event]) )
+<style>
+#main article .speaker
+{
+	color : #4A738C;
+	font-weight: bold;
+}
+</style>
+<section id="main">
+	<nav>
+		<h2>Upcoming events</h2>
+		<ul>
+			@for(evt <- events._2){
+			<li>
+				<a href="@routes.Application.event(evt.id.get)">@evt.title</a>
+				@evt.date.map {date => <span class="date">@date.format("dd MMMM yyyy")</span>}
+			</li>
+			}
+		</ul>
+		<h2>Past events</h2>
+		<ul>
+		@for(evt <- events._1){
+			<li>
+				<a href="@routes.Application.event(evt.id.get)">@evt.title</a>
+				@evt.date.map {date => <span class="date">@date.format("dd MMMM yyyy")</span>}
+			</li>
+			}
+		</ul>
+	</nav>
+	<article>
+		@partner.map { p => 
+		<h2>Partenaire</h2>
+		<p>Cet évènement est sponsorisé par <a href="routes.Application.eventPartner(event.partner.id)">${event.partner.name}</a>.</p>
+		@p.logourl.map { url =>
+		<p align="center"><img src="@url"/></p>
+		}
+		}
+		#{if event.report != null && !event.report.equals("")}
+			<h2>Compte rendu de la soir√©e</h2>
+			${event.report}
+		#{/if}
+		<h2>Programme</h2>
+		#{list event.talks(), as : "talk"}
+			<h3>${talk.time} : ${talk.title}</h3>
+			#{if talk.getTags()}
+			<p>Tags:
+			#{list talk.getTags(), as : "tag"}
+			<a href="Application.listTagged(tag.name)">${tag.name}</a>${tag_isLast ?'':', ' }
+			#{/list}
+			#{/if}
+			</p>
+			#{if talk.speaker}
+			<p>Pr√©sent√© par <a href="Application.member(talk.speaker.id)">${talk.speaker.fullName}</a></p>
+			#{/if}
+			<p>${talk.teaser}</p>
+		#{/list}
+
+		<h2>Lieu</h2>
+		<p>${event.location}</p>
+		#{if event.map != null && !event.map.equals("")}
+			${event.map.raw()}
+		#{/if}
+		
+		<h2>Inscription</h2>
+		<a id="inscription"></a>
+		#{if (utils.EventBrite.isEventBrite(event)) }
+		<div style="width:100%; text-align:left;" >
+  			<iframe src="http://www.eventbrite.com/tickets-external?eid=${utils.EventBrite.getId(event)}&ref=etckt" frameborder="0" height="160" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe>
+		</div>
+		#{/if}
+		<h2>After</h2>
+		<p>A la fin de la soirée, une troisième mi-temps sera proposée dans un bar pour continuer à échanger et sympathiser </p>
+		
+		<p>
+		#{include 'Social/_twitterbutton.html' /}
+		</p>
+		
+		<div class="attachments">
+			#{list attachments, as : "attachment"}
+				<a href="Application.downloadEventAttachment(event.id, attachment)">${attachment}</a> 
+				#{if session.get("username").equals(play.configuration['secure.admin.username'])}
+					<a href="Admin.rmEventAttachment(event.id, attachment)" class="remove">x</a>
+				#{/if}	
+				<br />
+			#{/list}
+			<br />
+			#{if session.get("username").equals(play.configuration['secure.admin.username'])}
+				<div>
+		    	#{form Admin.addEventAttachment(event.id), method:'POST', enctype:'multipart/form-data'}
+		        <input type="file" name="attachment" />
+		        <button type="submit">&{'send'}</button>
+			    #{/form}
+			    #{if flash.success}
+			    	<div class="flash-success">${flash.success}</div>
+			    #{/if}
+			    #{if flash.error}
+			    	<div class="flash-error">${flash.error}</div>
+			    #{/if}
+		    	</div>
+	    	#{/if}
+    	</div>
+    	
+    	#{if event.old()}
+		<div id="disqus-comments">
+		<h2>Commentaires</h2>
+		<div id="disqus_thread"></div>
+		<script type="text/javascript">
+		    var disqus_url = '@routes.Application.event(1)';
+		    var disqus_identifier = 'event-${event.id}';
+		    var disqus_shortname = 'jugmontpellier';
+		    #{if play.mode.isDev()}
+		    var disqus_developer = 1;
+		    #{/if}
+		  (function() {
+		   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		   dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		  })();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=jugmontpellier">comments powered by Disqus.</a></noscript>
+		</div>
+		#{/if}
+	</article>
+</section>
+

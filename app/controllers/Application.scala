@@ -3,9 +3,10 @@ package controllers
 
 import play.api.templates.Html
 import views.html._
-
 import models.Speakers
 import models.Events
+import models.Eventpartner
+import models.Eventpartners
 
 object Application extends MainAction  {
 
@@ -20,8 +21,14 @@ object Application extends MainAction  {
     Html("News")
   }
 
-  def event(nextEventId: Long) = mainAction {
-    Html("Event: " + nextEventId)
+  def event(id: Long) = mainActionW(List("EventBrite.jquery.js")) {
+    
+    database.withSession {
+        val event = Events.getById(id).get
+        val partner = event.event.partner_id.flatMap {id => Eventpartners.getById(id)}
+    	views.html.event(event, partner, Events.pastAndUpComing)
+    }
+    
   }
 
   def about = mainAction {

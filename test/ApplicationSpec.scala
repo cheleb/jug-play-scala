@@ -15,7 +15,7 @@ class ApplicationSpec extends Specification {
   "Application" should {
     
     "send 404 on a bad request" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
         route(FakeRequest(GET, "/boum")) must beNone        
       }
     }
@@ -30,4 +30,11 @@ class ApplicationSpec extends Specification {
       }
     }
   }
+
+def memDB[T](code: =>T) = 
+  running( FakeApplication( additionalConfiguration = Map( 
+    "db.default.driver" -> "org.h2.Driver", 
+    "db.default.url"    -> "jdbc:h2:mem:test;MODE=PostgreSQL" 
+  ) ) )(code) 
+
 }

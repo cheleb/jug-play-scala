@@ -1,6 +1,6 @@
-@(message: String)(implicit event: Option[EventViewObject], partners: List[Yearpartner])
+@(message: String)(scripts: List[String])(implicit  event: Option[EventViewObject], partners: List[Yearpartner])
 
-@main(message){
+@main(message)(scripts){
     
     @welcome
     

@@ -23,30 +23,21 @@ trait MainAction extends Controller {
 
   lazy val database = Database.forDataSource(DB.getDataSource())
 
-  def mainAction(c: Html): Action[AnyContent] = Action {
-    Ok(views.html.main("JUG de Montpellier - play 2.1")(c))
+  def mainActionW(script: List[String])(c: Html): Action[AnyContent] = Action {
+    Ok(views.html.main("JUG de Montpellier - play 2.1")(script)(c))
   }
+
+  def mainAction(c: Html): Action[AnyContent] = Action {
+    Ok(views.html.main("JUG de Montpellier - play 2.1")(List())(c))
+  }
+
 
   implicit def event: Option[(EventViewObject)] = {
 
     database.withSession {
 
-      val q = for {
-        e <- Events if e.open
-        t <- Talks if t.event_id === e.id
-        s <- Speakers if s.id === t.speaker_id
-
-      } yield (e, t, s)
-
-      val list = q.list
-      val map = list.groupBy(t => t._1)
-
-      val r = map map { case (k, v) => EventViewObject(k, v map (_._2), v map (_._3)) }
-
-      r match {
-        case h :: _ => Some(h)
-        case _ => None
-      }
+      Events.getOpened
+     
     }
 
   }

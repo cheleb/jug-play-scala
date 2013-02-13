@@ -44,7 +44,7 @@ object Events extends Table[Event]("event") {
 
   def last(n: Int) = Query(Events).sortBy(_.date.desc.nullsLast).take(n).list
 
-  def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.span { e => e.date.get.before(new Timestamp(Calendar.getInstance().getTime().getTime())) }
+  def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.partition { e => e.date.get.before(new Timestamp(Calendar.getInstance().getTime().getTime())) }
 
   def getById(id: Long) = {
 

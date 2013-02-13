@@ -36,7 +36,9 @@ object Application extends MainAction  {
   }
   
   def members = mainAction {
-    Html("Members")
+    database.withSession {
+    	views.html.members(Speakers.all)
+    }
   }
 
   def member(id: Long) = mainAction {

@@ -191,7 +191,9 @@ object Speakers extends Table[Speaker]("speaker") {
   def personalurl = column[String]("personalurl")
   def * = id.? ~ activity.? ~ compan.? ~ description.? ~ fullname.? ~ jugmember.? ~ memberfct.? ~ photourl.? ~ url.? ~ email.? ~ personalurl.? <> (Speaker, Speaker.unapply _)
 
-  def all() = Query(Speakers).list
+  def all() = Query(Speakers).sortBy(_.id).list
+   
+  
 }
 case class Tag(id: Option[Long], name: Option[String])
 

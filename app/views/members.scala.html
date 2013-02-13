@@ -1,0 +1,20 @@
+@(members: List[Speaker])
+<section id="members">
+	<h2>Membres</h2>
+	@for( member <- members ){
+		<article>
+			<div class="member-photo">
+     			<img width="110" alt="@member.fullname.get" src="@gravatar.url(member)">
+			</div>
+			<div>
+			<h3><a href="@routes.Application.member(member.id.get)">@member.fullname.get</a>@member.memberfct.map {m=> &nbsp;<span class="member-fonction">@m</span>}</h3>
+			@if(member.url.nonEmpty){
+			@member.url.map { url => <span><a href="@url" target="_blank">@member.compan.get</a></span><br /> }
+            } else {
+				<span>@member.compan.get</span><br />
+			}
+			@member.activity.map { a => @a }
+			</div>
+		</article>
+	}
+</section>

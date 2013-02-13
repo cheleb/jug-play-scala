@@ -9,6 +9,13 @@ import java.util.Calendar
 
 case class User(id: Option[Long], email: Option[String])
 
+object util {
+	def now() = {
+		new Timestamp(Calendar.getInstance().getTime().getTime())
+	}
+}
+
+
 object Users extends Table[User]("User") {
   def id = column[Long]("id", O.PrimaryKey)
   def email = column[String]("email")
@@ -44,7 +51,7 @@ object Events extends Table[Event]("event") {
 
   def last(n: Int) = Query(Events).sortBy(_.date.desc.nullsLast).take(n).list
 
-  def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.partition { e => e.date.get.before(new Timestamp(Calendar.getInstance().getTime().getTime())) }
+  def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.partition { e => e.date.get.before(util.now()) }
 
   def getById(id: Long) = {
 
@@ -234,6 +241,12 @@ object Yearpartners extends Table[Yearpartner]("yearpartner") {
   def * = id.? ~ description.? ~ logourl.? ~ name.? ~ startdate.? ~ stopdate.? ~ url.? <> (Yearpartner, Yearpartner.unapply _)
 
   def all() = Query(Yearpartners).list
+  
+  def runnings = {
+    val q = Query(Yearpartners)
+    val now = util.now
+    q.filter( _.startdate < now).filter(_.stopdate > now).list
+  }
 }
 
 

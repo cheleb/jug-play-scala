@@ -50,8 +50,7 @@ object Events extends Table[Event]("event") {
     val q = for {
       e <- Events if e.id === id
       t <- Talks if t.event_id === e.id
-      t_t <- Talk_tags if t_t.talk_id === t.id
-      tag <- Tags if tag.id === t_t.tags_id
+      (t_t,tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
       s <- Speakers if s.id === t.speaker_id
     } yield (e, t, s, tag)
 
@@ -63,8 +62,7 @@ object Events extends Table[Event]("event") {
     val q = for {
       e <- Events if e.open
       t <- Talks if t.event_id === e.id
-      t_t <- Talk_tags if t_t.talk_id === t.id 
-      tag <- Tags if t_t.tags_id === tag.id
+      (t_t,tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
       s <- Speakers if s.id === t.speaker_id
     } yield (e, t, s, tag)
 
@@ -75,11 +73,21 @@ object Events extends Table[Event]("event") {
 
     val list = q.list
     
-    val map = list.groupBy(t => t._1).map { case (k, v) => (k,v.groupBy(u => u._2)) }
+    val event = list.groupBy(etst => etst._1).map {
+		case (evt, etst) => (evt,etst.groupBy(etst2 => etst2._2))
+    }
 
-    val r = map map { case (k, v) => EventViewObject(k, v.toList.map { case (talk, list) => TalkViewObject(talk, list.map(_._3).distinct, list.map(_._4).distinct) }, k.partner_id.flatMap(id => Eventpartners.getById(id))) }
+    val viewObject = event map {
+      case (evt, etst) => EventViewObject(evt,
+				     etst.toList.map {
+					case (talk, list) => TalkViewObject(talk,
+									    list.map(_._3).distinct,
+									    list.map(_._4).distinct)
+				     },
+				     evt.partner_id.flatMap(id => Eventpartners.getById(id)))
+    }
 
-    r match {
+    viewObject match {
       case h :: _ => Some(h)
       case _ => None
     }

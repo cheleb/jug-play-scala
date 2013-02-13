@@ -1,6 +1,7 @@
 package models
 
 import scala.slick.driver.BasicDriver.simple._
+//import scala.slick.driver.PostgresDriver.simple._
 
 import Database.threadLocalSession
 import java.sql.Timestamp
@@ -41,7 +42,7 @@ object Events extends Table[Event]("event") {
   def partner_id = column[Long]("partner_id")
   def * = id.? ~ capacity ~ date.? ~ description.? ~ location.? ~ map.? ~ open ~ registrationurl.? ~ report.? ~ title.? ~ partner_id.? <> (Event, Event.unapply _)
 
-  def all() = Query(Events).sortBy(_.date.desc.nullsLast).list
+  def last(n: Int) = Query(Events).sortBy(_.date.desc.nullsLast).take(n).list
 
   def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.span { e => e.date.get.before(new Timestamp(Calendar.getInstance().getTime().getTime())) }
 

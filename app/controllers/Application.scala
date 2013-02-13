@@ -13,7 +13,7 @@ object Application extends MainAction  {
   def index = mainAction {
     database.withSession {
       
-    	views.html.home(Events.all)
+    	views.html.home(Events.last(3))
     }
   }
 

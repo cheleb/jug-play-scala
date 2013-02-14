@@ -1,5 +1,6 @@
 package models
 
+import play.Play
 import scala.slick.driver.BasicDriver.simple._
 //import scala.slick.driver.PostgresDriver.simple._
 
@@ -10,11 +11,10 @@ import java.util.Calendar
 case class User(id: Option[Long], email: Option[String])
 
 object util {
-	def now() = {
-		new Timestamp(Calendar.getInstance().getTime().getTime())
-	}
+  def now() = {
+    new Timestamp(Calendar.getInstance().getTime().getTime())
+  }
 }
-
 
 object Users extends Table[User]("User") {
   def id = column[Long]("id", O.PrimaryKey)
@@ -34,7 +34,23 @@ object Answers extends Table[Answer]("answer") {
 
   def all() = Query(Answers).list
 }
-case class Event(id: Option[Long], capacity: Int, date: Option[Timestamp], description: Option[String], location: Option[String], map: Option[String], open: Boolean, registrationurl: Option[String], report: Option[String], title: Option[String], partner_id: Option[Long])
+
+object tets {
+
+}
+
+case class Event(id: Option[Long], capacity: Int, date: Option[Timestamp], description: Option[String], location: Option[String], map: Option[String], open: Boolean, registrationurl: Option[String], report: Option[String], title: Option[String], partner_id: Option[Long]) {
+  def attachments: Array[String] = {
+
+    val eventFolder = Play.application().getFile(s"/public/event${id.get}")
+    if (eventFolder != null) {
+      val list = eventFolder.list()
+      if (list != null)
+        return list
+    }
+    Array()
+  }
+}
 object Events extends Table[Event]("event") {
   def id = column[Long]("id", O.PrimaryKey)
   def capacity = column[Int]("capacity")
@@ -58,7 +74,7 @@ object Events extends Table[Event]("event") {
     val q = for {
       e <- Events if e.id === id
       t <- Talks if t.event_id === e.id
-      (t_t,tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
+      (t_t, tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
       s <- Speakers if s.id === t.speaker_id
     } yield (e, t, s, tag)
 
@@ -70,7 +86,7 @@ object Events extends Table[Event]("event") {
     val q = for {
       e <- Events if e.open
       t <- Talks if t.event_id === e.id
-      (t_t,tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
+      (t_t, tag) <- Talk_tags leftJoin Tags on (_.tags_id === _.id)
       s <- Speakers if s.id === t.speaker_id
     } yield (e, t, s, tag)
 
@@ -80,19 +96,19 @@ object Events extends Table[Event]("event") {
   private def vo(q: Query[(models.Events.type, models.Talks.type, models.Speakers.type, models.Tags.type), (models.Event, models.Talk, models.Speaker, models.Tag)]): Option[EventViewObject] = {
 
     val list = q.list
-    
+
     val event = list.groupBy(etst => etst._1).map {
-		case (evt, etst) => (evt,etst.groupBy(etst2 => etst2._2))
+      case (evt, etst) => (evt, etst.groupBy(etst2 => etst2._2))
     }
 
     val viewObject = event map {
       case (evt, etst) => EventViewObject(evt,
-				     etst.toList.map {
-					case (talk, list) => TalkViewObject(talk,
-									    list.map(_._3).distinct,
-									    list.map(_._4).distinct)
-				     },
-				     evt.partner_id.flatMap(id => Eventpartners.getById(id)))
+        etst.toList.map {
+          case (talk, list) => TalkViewObject(talk,
+            list.map(_._3).distinct,
+            list.map(_._4).distinct)
+        },
+        evt.partner_id.flatMap(id => Eventpartners.getById(id)))
     }
 
     viewObject match {
@@ -192,8 +208,7 @@ object Speakers extends Table[Speaker]("speaker") {
   def * = id.? ~ activity.? ~ compan.? ~ description.? ~ fullname.? ~ jugmember.? ~ memberfct.? ~ photourl.? ~ url.? ~ email.? ~ personalurl.? <> (Speaker, Speaker.unapply _)
 
   def all() = Query(Speakers).sortBy(_.id).list
-   
-  
+
 }
 case class Tag(id: Option[Long], name: Option[String])
 
@@ -243,11 +258,11 @@ object Yearpartners extends Table[Yearpartner]("yearpartner") {
   def * = id.? ~ description.? ~ logourl.? ~ name.? ~ startdate.? ~ stopdate.? ~ url.? <> (Yearpartner, Yearpartner.unapply _)
 
   def all() = Query(Yearpartners).list
-  
+
   def runnings = {
     val q = Query(Yearpartners)
     val now = util.now
-    q.filter( _.startdate < now).filter(_.stopdate > now).list
+    q.filter(_.startdate < now).filter(_.stopdate > now).list
   }
 }
 

@@ -60,28 +60,30 @@
 		<p>@vo.event.location</p>
 		@vo.event.map.map { map => @map}
 				
+	    @if(vo.event.open){
 		<h2>Inscription</h2>
 		<a id="inscription"></a>
 		<div style="width:100%; text-align:left;" >
-  			<iframe src="http://www.eventbrite.com/tickets-external?eid=${utils.EventBrite.getId(event)}&ref=etckt" frameborder="0" height="160" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe>
+  			<iframe src="http://www.eventbrite.com/tickets-external?eid=@eventBrite.getId(vo.event)&ref=etckt" frameborder="0" height="160" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe>
 		</div>
 		<h2>After</h2>
 		<p>A la fin de la soirée, une troisième mi-temps sera proposée dans un bar pour continuer à échanger et sympathiser </p>
 		
 		<p>
-		#{include 'Social/_twitterbutton.html' /}
+		<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="montpellierjug" data-lang="fr">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 		</p>
+		}
 		
 		<div class="attachments">
-			#{list attachments, as : "attachment"}
-				<a href="Application.downloadEventAttachment(event.id, attachment)">${attachment}</a> 
-				#{if session.get("username").equals(play.configuration['secure.admin.username'])}
+			@for( attachment <- vo.event.attachments ){
+				<a href="Application.downloadEventAttachment(event.id, attachment)">@attachment</a> 
+				@if(false) {
 					<a href="Admin.rmEventAttachment(event.id, attachment)" class="remove">x</a>
-				#{/if}	
+				}	
 				<br />
-			#{/list}
+			}
 			<br />
-			#{if session.get("username").equals(play.configuration['secure.admin.username'])}
+			@if(false){
 				<div>
 		    	#{form Admin.addEventAttachment(event.id), method:'POST', enctype:'multipart/form-data'}
 		        <input type="file" name="attachment" />
@@ -94,10 +96,10 @@
 			    	<div class="flash-error">${flash.error}</div>
 			    #{/if}
 		    	</div>
-	    	#{/if}
+	    	}
     	</div>
     	
-    	#{if event.old()}
+    	@if( !vo.event.open ){
 		<div id="disqus-comments">
 		<h2>Commentaires</h2>
 		<div id="disqus_thread"></div>
@@ -116,7 +118,7 @@
 		</script>
 		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=jugmontpellier">comments powered by Disqus.</a></noscript>
 		</div>
-		#{/if}
+		}
 	</article>
 </section>
 

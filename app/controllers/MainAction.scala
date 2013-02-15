@@ -19,33 +19,35 @@ import scala.slick.session.Session
 import models.Talks
 import models.Talk
 
-trait MainAction extends Controller {
+trait MainAction extends Controller with DBSession {
 
-  lazy val database = Database.forDataSource(DB.getDataSource())
+  val title = "JUG de Montpellier - play 2.1"
 
-  def mainActionW(script: List[String])(c: Html): Action[AnyContent] = Action {
-    Ok(views.html.main("JUG de Montpellier - play 2.1")(script)(c))
-  }
+  def mainPage(c: Html): Html =
+    views.html.main(title)(List())(c)
 
-  def mainAction(c: Html): Action[AnyContent] = Action {
-    Ok(views.html.main("JUG de Montpellier - play 2.1")(List())(c))
-  }
-
-
-  implicit def event: Option[(EventViewObject)] = {
-
-    database.withSession {
-
-      Events.getOpened
-     
+  def mainDBActionWithJS(js: List[String])(c: => Html): Action[AnyContent] = Action {
+    withSession {
+      Ok(views.html.main(title)(js)(c))
     }
-
   }
-  
-  implicit def yearPartners : List[Yearpartner] = {
-    database.withSession {
-      Yearpartners.runnings
-    }
+
+  def mainDBAction(c: => Html): Action[AnyContent] =
+    mainDBActionWithJS(List())(c)
+
+  def mainAction(c: Html): Action[AnyContent] =
+    mainActionWithJS(List())(c)
+
+  def mainActionWithJS(script: List[String])(c: Html): Action[AnyContent] = Action {
+    Ok(views.html.main(title)(script)(c))
+  }
+
+  implicit def event: Option[(EventViewObject)] = withSession {
+    Events.getOpened
+  }
+
+  implicit def yearPartners: List[Yearpartner] = withSession {
+    Yearpartners.runnings
   }
 
 }

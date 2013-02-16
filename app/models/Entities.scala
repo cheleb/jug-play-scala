@@ -193,8 +193,6 @@ object Polls extends Table[Poll]("poll") {
 }
 case class Speaker(id: Option[Long], activity: Option[String], compan: Option[String], description: Option[String], fullname: Option[String], jugmember: Option[Boolean], memberfct: Option[String], photourl: Option[String], url: Option[String], email: Option[String], personalurl: Option[String])
 
-
-
 object Speakers extends Table[Speaker]("speaker") {
   def id = column[Long]("id", O.PrimaryKey)
   def activity = column[String]("activity")

@@ -29,7 +29,5 @@ trait DBSession {
     }
 
   }
-  
-
 
 }

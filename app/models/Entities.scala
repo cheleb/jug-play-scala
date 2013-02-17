@@ -69,6 +69,8 @@ object Events extends Table[Event]("event") {
 
   def pastAndUpComing = Query(Events).sortBy(_.date.desc.nullsLast).list.partition { e => e.date.get.before(util.now()) }
 
+  def all = Query(Events).sortBy(_.date).list
+  
   def getById(id: Long) = {
 
     val q = for {

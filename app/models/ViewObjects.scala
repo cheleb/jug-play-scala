@@ -31,7 +31,7 @@ object gravatar {
   def url(speaker: Speaker) = {
     speaker.email match {
       case Some(e) => "http://www.gravatar.com/avatar/" + md5Hex(e)
-      case _ => routes.Assets.at("images/none.jpg", "/public")
+      case _ => routes.Assets.at("/public", "images/none.jpg")
     }
   }
 }

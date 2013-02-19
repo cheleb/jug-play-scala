@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     "postgresql" % "postgresql" % "9.1-901.jdbc4",
     "com.typesafe.slick" %% "slick" % "1.0.0",
-    "io.spray" %% "spray-json" % "1.2.3",
+    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
     jdbc)
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

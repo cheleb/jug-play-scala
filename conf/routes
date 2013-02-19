@@ -19,3 +19,6 @@ GET     /api/yearpartners           controllers.API.yearPartners
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /packages/*file             controllers.Assets.at(path="/packages", file)
+GET     /*file                      controllers.Assets.at(path="/dart", file)
+

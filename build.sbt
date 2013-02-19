@@ -4,5 +4,4 @@ scalacOptions ++= Seq("-target:jvm-1.7")
 
 resolvers += "Spray IO" at "http://repo.spray.io/" 
 
-//playAssetsDirectories <+= baseDirectory / "packages"
-
+mainDarts := Seq("sosimple.dart")

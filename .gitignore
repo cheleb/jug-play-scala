@@ -5,6 +5,7 @@ dist/
 .settings/
 .target/
 bin/
+dart/
 logs/
 target/
 manifest.yml
